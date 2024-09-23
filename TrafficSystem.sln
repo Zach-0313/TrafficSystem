@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSystem", "TrafficSystem\TrafficSystem.csproj", "{3500A197-423D-4230-A70A-AF2807FA9683}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3500A197-423D-4230-A70A-AF2807FA9683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3500A197-423D-4230-A70A-AF2807FA9683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3500A197-423D-4230-A70A-AF2807FA9683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3500A197-423D-4230-A70A-AF2807FA9683}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FDB5522B-21CF-4170-90C7-EE55DE258959}
+	EndGlobalSection
+EndGlobal
