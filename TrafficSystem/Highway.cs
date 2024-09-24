@@ -16,6 +16,12 @@ namespace TrafficSystem
         public LanePosition[,] lanePositions;
         public int x_size;
         public int y_size;
+
+        public event EventHandler VehicleTimeStep;
+        public void Timestep()
+        {
+            VehicleTimeStep?.Invoke(this, EventArgs.Empty);
+        }
         public Highway(int X, int Y)
         {
             x_size= X; y_size = Y;

@@ -15,11 +15,11 @@ namespace TrafficSystem
         int vehiclesSpawned = 0;
         public static Highway highway = new Highway(5, 100);
         List<Vehicle> vehicles = new List<Vehicle>();
+        
         Rectangle[,] rectangles = new Rectangle[highway.x_size, highway.y_size];
 
         private DispatcherTimer _timer;
         private int _timeSteps = 0;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -37,7 +37,7 @@ namespace TrafficSystem
 
                 if (highway.lanePositions[x,y].thisState == LanePosition.State.empty)
                 {
-                    vehicles.Add(new Vehicle(highway, x, y, 30));
+                    vehicles.Add(new Vehicle(highway, x, y, 40, vehicleCount));
                     vehicleCount++;
                 }
             }
@@ -45,7 +45,7 @@ namespace TrafficSystem
         private void StartTimer()
         {
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(.5);
+            _timer.Interval = TimeSpan.FromSeconds(.25);
             _timer.Tick += Timer_Tick;
             _timer.Start();
         }
@@ -53,14 +53,14 @@ namespace TrafficSystem
         public void Timer_Tick(object sender, EventArgs e)
         {
             SpawnVehicles();
-
-            foreach (Vehicle vehicle in vehicles)
-            {
-                vehicle.Step();
-            }
+            highway.Timestep();
             _timeSteps++;
             MyTextBlock.Text = _timeSteps.ToString();
             UpdateRectangles();
+
+        }
+        public void VehicleDone()
+        {
 
         }
         public void DrawHighway(Canvas canvas)
