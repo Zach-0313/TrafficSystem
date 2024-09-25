@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace TrafficSystem
 {
@@ -11,82 +10,68 @@ namespace TrafficSystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        int vehicleCount = 20;
-        int vehiclesSpawned = 0;
-        public static Highway highway = new Highway(5, 100);
-        List<Vehicle> vehicles = new List<Vehicle>();
-        
-        Rectangle[,] rectangles = new Rectangle[highway.x_size, highway.y_size];
-
-        private DispatcherTimer _timer;
+        public Rectangle[,] rectangles;
+        Highway highway;
         private int _timeSteps = 0;
+
+        SimulationConfig simulationConfig = new SimulationConfig
+        {
+            HighwayWidth = 5,
+            HighwayLength = 50,
+            LaneClosureStart = 10,
+            LaneClosureLength = 10,
+            LaneClosureWidth = 2,
+            VehicleCount = 50,
+            VehicleExitIndex = 40,
+            Timestep = 0.5f
+        };
+
         public MainWindow()
         {
+            Simulation simulation = new Simulation(simulationConfig);
+            simulation.InitalizeHighway();
+
+            highway = simulation._highway;
+            rectangles = new Rectangle[simulationConfig.HighwayWidth, simulationConfig.HighwayLength];
+
             InitializeComponent();
-            highway.CloseLane(7, 15, 3);
-            StartTimer();
             DrawHighway(MyCanvas);
-        }
-        void SpawnVehicles()
-        {
-            Random random = new Random();
-            if (vehiclesSpawned < vehicleCount)
-            {
-                int x = random.Next(highway.x_size-1);
-                int y = random.Next(3);
 
-                if (highway.lanePositions[x,y].thisState == LanePosition.State.empty)
-                {
-                    vehicles.Add(new Vehicle(highway, x, y, 40, vehicleCount));
-                    vehicleCount++;
-                }
-            }
-        }
-        private void StartTimer()
-        {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(.25);
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
+            Vehicle.UpdateVehicleDisplay += UpdateSingleRectangles;
+            simulation.Timer_Tick += UpdateTimerUI;
         }
 
-        public void Timer_Tick(object sender, EventArgs e)
+        private void UpdateTimerUI()
         {
-            SpawnVehicles();
-            highway.Timestep();
             _timeSteps++;
             MyTextBlock.Text = _timeSteps.ToString();
-            UpdateRectangles();
-
-        }
-        public void VehicleDone()
-        {
-
         }
         public void DrawHighway(Canvas canvas)
         {
-            int height = 10;
-            int space = 2;
+            int nWidth = (int)Application.Current.MainWindow.ActualWidth;
+
+            int height = (int)(700 / simulationConfig.HighwayLength);
+            int space = 0;
 
 
             for (int x = 0; x < highway.x_size; x++)
             {
                 for (int y = 0; y < highway.y_size; y++)
                 {
-            rectangles[x, y] = new Rectangle
-            {
-                Height = height,
-                Width = height,
-            };
-                    switch (highway.lanePositions[x,y].thisState)
+                    rectangles[x, y] = new Rectangle
                     {
-                        case LanePosition.State.empty:
+                        Height = height,
+                        Width = height,
+                    };
+                    switch (highway.lanePositions[x, y].thisState)
+                    {
+                        case LanePosition.LaneState.empty:
                             rectangles[x, y].Fill = Brushes.Gray;
                             break;
-                        case LanePosition.State.closed:
+                        case LanePosition.LaneState.closed:
                             rectangles[x, y].Fill = Brushes.Red;
                             break;
-                        case LanePosition.State.occupied:
+                        case LanePosition.LaneState.occupied:
                             rectangles[x, y].Fill = Brushes.Green;
                             break;
                     }
@@ -94,7 +79,6 @@ namespace TrafficSystem
                     canvas.Children.Add(rectangles[x, y]);
                     Canvas.SetLeft(rectangles[x, y], y * (height + space));
                     Canvas.SetTop(rectangles[x, y], x * (height + space));
-
                 }
             }
         }
@@ -106,18 +90,25 @@ namespace TrafficSystem
                 {
                     switch (highway.lanePositions[x, y].thisState)
                     {
-                        case LanePosition.State.empty:
+                        case LanePosition.LaneState.empty:
                             rectangles[x, y].Fill = Brushes.Gray;
                             break;
-                        case LanePosition.State.closed:
+                        case LanePosition.LaneState.closed:
                             rectangles[x, y].Fill = Brushes.Red;
                             break;
-                        case LanePosition.State.occupied:
+                        case LanePosition.LaneState.occupied:
                             rectangles[x, y].Fill = Brushes.Green;
                             break;
                     }
                 }
             }
         }
+        public void UpdateSingleRectangles(object sender, Vehicle.PositionChangeData data)
+        {
+            rectangles[data.oldX, data.oldY].Fill = Brushes.Gray;
+            rectangles[data.newX, data.newY].Fill = Brushes.Green;
+        }
+
+
     }
 }

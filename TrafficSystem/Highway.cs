@@ -2,15 +2,6 @@
 
 namespace TrafficSystem
 {
-    public class LanePosition
-    {
-        public enum State { empty, closed, occupied };
-        public State thisState = State.empty;
-        public LanePosition()
-        {
-            thisState = State.empty;
-        }
-    }
     public class Highway
     {
         public LanePosition[,] lanePositions;
@@ -41,7 +32,7 @@ namespace TrafficSystem
             {
                 for (int y = start; y < end; y++)
                 {
-                    lanePositions[x, y].thisState = State.closed;
+                    lanePositions[x, y].thisState = LaneState.closed;
                 }
             }
         }

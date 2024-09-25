@@ -1,18 +1,15 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-
-namespace TrafficSystem
+﻿namespace TrafficSystem
 {
     public class Vehicle
     {
         private Highway _highway;
-        LanePosition LanePosition;
+        LanePosition currentLanePosition;
         int x_current;
         int y_current;
         int exit = -1;
         int steps_waiting;
         bool reachedExit;
-        private VehicleData data;
+        private VehicleData _vehicleData;
         public struct VehicleData
         {
             public int vehicleNum;
@@ -20,17 +17,24 @@ namespace TrafficSystem
             public int laneChanges;
             public int exit;
         }
-
+        public struct PositionChangeData
+        {
+            public int oldX;
+            public int oldY;
+            public int newX;
+            public int newY;
+        }
+        public static event EventHandler<PositionChangeData> UpdateVehicleDisplay;
         public event EventHandler<VehicleData> ExitReached;
         public Vehicle(Highway h, int startX, int startY, int exitIndex, int num)
         {
-            data.vehicleNum = num;
+            _vehicleData.vehicleNum = num;
             x_current = startX;
             y_current = startY;
             _highway = h;
-            data.exit = exitIndex;
-            LanePosition = _highway.lanePositions[startX, startY];
-            LanePosition.thisState = LanePosition.State.occupied;
+            _vehicleData.exit = exitIndex;
+            currentLanePosition = _highway.lanePositions[startX, startY];
+            currentLanePosition.thisState = LanePosition.LaneState.occupied;
 
             _highway.VehicleTimeStep += Step;
         }
@@ -38,14 +42,15 @@ namespace TrafficSystem
         {
             int x = Math.Clamp(x_current + offX, 0, _highway.x_size - 1);
             int y = Math.Clamp(y_current + offY, 0, _highway.y_size - 1);
-            return _highway.lanePositions[x, y].thisState == LanePosition.State.empty;
+            return _highway.lanePositions[x, y].thisState == LanePosition.LaneState.empty;
         }
-        private LanePosition.State getNextPosition()
+        private LanePosition.LaneState getNextPosition()
         {
             return _highway.lanePositions[x_current, y_current + 1].thisState;
         }
         public void Step(object sender, EventArgs e)
         {
+
             if (reachedExit)
             {
                 return;
@@ -53,56 +58,80 @@ namespace TrafficSystem
             if (y_current >= exit && x_current == _highway.x_size - 1)
             {
                 Console.WriteLine("Reached Exit");
-                LanePosition.thisState = LanePosition.State.empty;
+                currentLanePosition.thisState = LanePosition.LaneState.empty;
                 reachedExit = true;
 
-                ExitReached?.Invoke(this, data);
+                ExitReached?.Invoke(this, _vehicleData);
                 return;
             }
             int rightMost = Math.Clamp(x_current + 1, 0, _highway.x_size - 1);
-            if ((x_current != _highway.x_size) && (data.exit - y_current <= _highway.x_size + 1))
+            if ((x_current != _highway.x_size) && (_vehicleData.exit - y_current <= _highway.x_size + 1))
             {
-                if (_highway.lanePositions[rightMost, y_current + 1].thisState == LanePosition.State.empty)
+                if (_highway.lanePositions[rightMost, y_current + 1].thisState == LanePosition.LaneState.empty)
                 {
-                    LanePosition.thisState = LanePosition.State.empty;
-                    LanePosition = _highway.lanePositions[rightMost, y_current+1];
-                    _highway.lanePositions[rightMost, y_current+1].thisState = LanePosition.State.occupied;
-                    x_current = rightMost;
-                    y_current++;
-                    data.laneChanges++;
+                    PositionChangeData data = new PositionChangeData
+                    {
+                        oldX = x_current,
+                        oldY = y_current,
+                        newX = rightMost,
+                        newY = y_current + 1,
+                    };
+                    currentLanePosition.thisState = LanePosition.LaneState.empty;
+                    currentLanePosition = _highway.lanePositions[data.newX, data.newY];
+                    _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
+                    x_current = data.newX;
+                    y_current = data.newY;
+                    _vehicleData.laneChanges++;
+                    UpdateVehicleDisplay(this, data);
                 }
                 else
                 {
-                    data.stepsWaiting++;
+                    _vehicleData.stepsWaiting++;
                 }
                 return;
             }
-            if (isEmpty(0,1))
+            if (isEmpty(0, 1))
             {
-                LanePosition.thisState = LanePosition.State.empty;
-                LanePosition = _highway.lanePositions[x_current, y_current + 1];
-                _highway.lanePositions[x_current, y_current + 1].thisState = LanePosition.State.occupied;
-                y_current++;
-                data.laneChanges++;
-                return;
-            }
-            if (getNextPosition() == LanePosition.State.occupied)
-            {
-                data.stepsWaiting++;
-                return;
-            }
-            if (getNextPosition() == LanePosition.State.closed)
-            {
-                if (isEmpty(-1,0) && isEmpty(-1,-1))
+                PositionChangeData data = new PositionChangeData
                 {
-                    LanePosition.thisState = LanePosition.State.empty;
-                    LanePosition = _highway.lanePositions[x_current - 1, y_current];
-                    _highway.lanePositions[x_current - 1, y_current].thisState = LanePosition.State.occupied;
-                    x_current--;
+                    oldX = x_current,
+                    oldY = y_current,
+                    newX = x_current,
+                    newY = y_current + 1,
+                };
+                currentLanePosition.thisState = LanePosition.LaneState.empty;
+                currentLanePosition = _highway.lanePositions[data.newX, data.newY];
+                _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
+                y_current = data.newY;
+                _vehicleData.laneChanges++;
+                UpdateVehicleDisplay(this, data);
+                return;
+            }
+            if (getNextPosition() == LanePosition.LaneState.occupied)
+            {
+                _vehicleData.stepsWaiting++;
+                return;
+            }
+            if (getNextPosition() == LanePosition.LaneState.closed)
+            {
+                if (isEmpty(-1, 0) && isEmpty(-1, -1))
+                {
+                    PositionChangeData data = new PositionChangeData
+                    {
+                        oldX = x_current,
+                        oldY = y_current,
+                        newX = x_current - 1,
+                        newY = y_current,
+                    };
+                    currentLanePosition.thisState = LanePosition.LaneState.empty;
+                    currentLanePosition = _highway.lanePositions[data.newX, data.newY];
+                    _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
+                    x_current = data.newX;
+                    UpdateVehicleDisplay(this, data);
                 }
                 else
                 {
-                    data.stepsWaiting++;
+                    _vehicleData.stepsWaiting++;
                 }
                 return;
             }
