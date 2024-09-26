@@ -55,17 +55,18 @@
             {
                 return;
             }
-            if (y_current >= exit && x_current == _highway.x_size - 1)
+            if (y_current == _vehicleData.exit)
             {
                 Console.WriteLine("Reached Exit");
                 currentLanePosition.thisState = LanePosition.LaneState.empty;
                 reachedExit = true;
 
+                _highway.VehicleTimeStep -= Step;
                 ExitReached?.Invoke(this, _vehicleData);
                 return;
             }
             int rightMost = Math.Clamp(x_current + 1, 0, _highway.x_size - 1);
-            if ((x_current != _highway.x_size) && (_vehicleData.exit - y_current <= _highway.x_size + 1))
+            if ((_vehicleData.exit - y_current <= _highway.x_size - x_current))
             {
                 if (_highway.lanePositions[rightMost, y_current + 1].thisState == LanePosition.LaneState.empty)
                 {
@@ -78,7 +79,7 @@
                     };
                     currentLanePosition.thisState = LanePosition.LaneState.empty;
                     currentLanePosition = _highway.lanePositions[data.newX, data.newY];
-                    _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
+                    currentLanePosition.thisState = LanePosition.LaneState.occupied;
                     x_current = data.newX;
                     y_current = data.newY;
                     _vehicleData.laneChanges++;

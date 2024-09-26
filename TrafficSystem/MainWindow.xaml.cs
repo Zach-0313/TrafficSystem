@@ -18,27 +18,26 @@ namespace TrafficSystem
         {
             HighwayWidth = 5,
             HighwayLength = 50,
-            LaneClosureStart = 10,
-            LaneClosureLength = 10,
-            LaneClosureWidth = 2,
-            VehicleCount = 50,
-            VehicleExitIndex = 40,
+            LaneClosureStart = 5,
+            LaneClosureEnd = 8,
+            LaneClosureWidth = 3,
+            VehicleCount = 10,
+            VehicleExitIndex = 15,
             Timestep = 0.5f
         };
 
         public MainWindow()
         {
+            InitializeComponent();
             Simulation simulation = new Simulation(simulationConfig);
-            simulation.InitalizeHighway();
 
-            highway = simulation._highway;
+            highway = Simulation.Instance._highway;
             rectangles = new Rectangle[simulationConfig.HighwayWidth, simulationConfig.HighwayLength];
 
-            InitializeComponent();
             DrawHighway(MyCanvas);
 
             Vehicle.UpdateVehicleDisplay += UpdateSingleRectangles;
-            simulation.Timer_Tick += UpdateTimerUI;
+            Simulation.Timer_Tick += UpdateTimerUI;
         }
 
         private void UpdateTimerUI()
@@ -51,7 +50,7 @@ namespace TrafficSystem
             int nWidth = (int)Application.Current.MainWindow.ActualWidth;
 
             int height = (int)(700 / simulationConfig.HighwayLength);
-            int space = 0;
+            int space = 1;
 
 
             for (int x = 0; x < highway.x_size; x++)
@@ -75,7 +74,10 @@ namespace TrafficSystem
                             rectangles[x, y].Fill = Brushes.Green;
                             break;
                     }
-
+                    if(y == simulationConfig.VehicleExitIndex)
+                    {
+                        rectangles[x, y].Fill = Brushes.Orange;
+                    }
                     canvas.Children.Add(rectangles[x, y]);
                     Canvas.SetLeft(rectangles[x, y], y * (height + space));
                     Canvas.SetTop(rectangles[x, y], x * (height + space));

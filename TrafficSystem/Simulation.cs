@@ -14,7 +14,7 @@ namespace TrafficSystem
         public int HighwayWidth;
         public int HighwayLength;
         public int LaneClosureStart;
-        public int LaneClosureLength;
+        public int LaneClosureEnd;
         public int LaneClosureWidth;
 
         public int VehicleCount;
@@ -23,15 +23,12 @@ namespace TrafficSystem
         public float Timestep;
     }
 
-    class Simulation
+    public class Simulation
     {
         public static Simulation Instance;
-        public Simulation(SimulationConfig simulationConfig)
-        {
-            config = simulationConfig;
-        }
-        public Action Timer_Tick;
+
         private SimulationConfig config;
+        public static Action Timer_Tick;
 
         private int vehiclesSpawned;
         private List<Vehicle> _vehicles = new List<Vehicle>();
@@ -41,16 +38,17 @@ namespace TrafficSystem
         private int _timeSteps = 0;
 
         private bool highwaySetup;
-        void SetConfig(SimulationConfig simulationConfig)
+        public Simulation(SimulationConfig simulationConfig)
         {
             config = simulationConfig;
+            InitalizeHighway();
         }
         public void InitalizeHighway()
         {
             if (Instance == null) Instance = this;
 
             _highway = new Highway(config.HighwayWidth, config.HighwayLength);
-            _highway.CloseLane(config.LaneClosureStart, config.LaneClosureLength, config.LaneClosureWidth);
+            _highway.CloseLane(config.LaneClosureStart, config.LaneClosureEnd, config.LaneClosureWidth);
             highwaySetup = true;
             StartTimer();
         }
