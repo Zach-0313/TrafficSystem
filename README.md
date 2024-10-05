@@ -27,4 +27,4 @@ The system is in early stages, but the core functionality is there.
 - A Simulation class has been added to the system to manage the setup of the simulation.
   - Simulation variables and parameters are passed into the system through a struct that contains all variables in a neat package
 - Simulation Runs and Control variables have been refined in the Methodology section of the literature review
-literature review or UML diagram
+- Lit Review is formatted correctly now and has citations properly implemented in OverLeaf
