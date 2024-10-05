@@ -17,5 +17,7 @@ and any extensions or changes to the original documentation (such as the literat
 The second control setup will be repeated with lane closures from 35 to 40, 60 to 65, and 105 to 115. This will be our worst case scenario test. Data will be recorded at various depths of lane closures(up to closing all but one lane).
 
 ### Extensions and Changes
-- 
+- A Simulation class has been added to the system to manage the setup of the simulation.
+  - Simulation variables and parameters are passed into the system through a struct that contains all variables in a neat package
+- Simulation Runs and Control variables have been refined in the Methodology section of the literature review
 literature review or UML diagram
