@@ -19,10 +19,10 @@ namespace TrafficSystem
             HighwayWidth = 5,
             HighwayLength = 50,
             LaneClosureStart = 5,
-            LaneClosureEnd = 8,
+            LaneClosureEnd = 20,
             LaneClosureWidth = 3,
-            VehicleCount = 10,
-            VehicleExitIndex = 15,
+            VehicleCount = 20,
+            VehicleExitIndex = 25,
             Timestep = 0.5f
         };
 
