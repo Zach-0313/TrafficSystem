@@ -23,6 +23,17 @@ The system is in early stages, but the core functionality is there.
 - Modifying these values will direct the simulation
 - Execute the project once your values are set
 - NOTE: a UI to set these values will be added soon, then clicking a "Run" button will run the simulation
+
+#### Features to be added
+- UI to set parameters before running simulation
+- ability to set different exits for each vehicle(multi-exit support)
+- Vehicle data recording
+  - Data processing (graphing? the most traversed lane positions? averages?)
+-  Performance improvements(to support more vehicles simulaniously)
+-  Support for shorter timesteps(faster simulation)
+  - Dynamically change timestep(normal speed, fast forward?)
+-  Pause feature
+
 ### Extensions and Changes
 - A Simulation class has been added to the system to manage the setup of the simulation.
   - Simulation variables and parameters are passed into the system through a struct that contains all variables in a neat package
