@@ -26,10 +26,10 @@ namespace TrafficSystem
             Timestep = 0.5f
         };
 
-        public MainWindow()
+        public MainWindow(SimulationConfig config)
         {
             InitializeComponent();
-            Simulation simulation = new Simulation(simulationConfig);
+            Simulation simulation = new Simulation(config);
 
             highway = Simulation.Instance._highway;
             rectangles = new Rectangle[simulationConfig.HighwayWidth, simulationConfig.HighwayLength];

@@ -9,10 +9,21 @@
       Title="SetupScreen">
 
     <Grid x:Name="MyGrid" Background="White">
-        <Button x:Name="Run_Button" Content="Run_Button" HorizontalAlignment="Left" Margin="572,245,0,0" VerticalAlignment="Top" Height="45" Width="86"/>
-        <Label Content="Number Of Cars" HorizontalAlignment="Left" Margin="140,120,0,0" VerticalAlignment="Top"/>
-        <Label Content="Highway Width" HorizontalAlignment="Left" Margin="140,140,0,0" VerticalAlignment="Top"/>
-        <StackPanel x:Name="Stack_Panel"/>
+        <Button x:Name="Run_Button" Content="Run_Button" HorizontalAlignment="Left" Margin="535,206,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Run_Clicked"/>
+        <Label Content="Number Of Cars" HorizontalAlignment="Left" Margin="127,128,0,0" VerticalAlignment="Top"/>
+        <Label Content="Highway Width" HorizontalAlignment="Left" Margin="127,163,0,0" VerticalAlignment="Top"/>
+        <Label Content="Highway Length" HorizontalAlignment="Left" Margin="127,198,0,0" VerticalAlignment="Top"/>
+        <Label Content="Lane Closure Start" HorizontalAlignment="Left" Margin="127,233,0,0" VerticalAlignment="Top"/>
+        <Label Content="Lane Closure End" HorizontalAlignment="Left" Margin="127,268,0,0" VerticalAlignment="Top"/>
+        <Label Content="Lane Closure Width" HorizontalAlignment="Left" Margin="127,302,0,0" VerticalAlignment="Top"/>
+        <Label Content="Exit Location" HorizontalAlignment="Left" Margin="127,333,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Car_Num" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,124,414,296" TextChanged="Update_Car_Count"/>
+        <TextBox x:Name="Highway_Length" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,194,414,226" TextChanged="Update_Highway_Length"/>
+        <TextBox x:Name="Highway_Width" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,159,414,261" TextChanged="Update_Highway_Width"/>
+        <TextBox x:Name="Lane_Close_Start" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,229,414,191" TextChanged="Update_LaneClosure_Start"/>
+        <TextBox x:Name="Lane_Close_End" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,264,414,156" TextChanged="Update_LaneClosure_End"/>
+        <TextBox x:Name="Exit_Input" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,329,414,91" TextChanged="Update_Exit"/>
+        <TextBox x:Name="Lane_Close_Width" TextWrapping="Wrap" Text="TextBox" Width="120" Margin="266,298,414,122" TextChanged="Update_LaneClosure_Width"/>
 
 
     </Grid>

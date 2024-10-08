@@ -25,28 +25,51 @@ namespace TrafficSystem
         public SetupScreen()
         {
             InitializeComponent();
-            FieldInfo[] members = simulationConfig.GetType().GetFields();
-
-            List<Action> buttonActions = new List<Action>();
-            foreach (var item in members)
-            {
-            var button = new TextBox() { Name = item.Name }; // Creating button
-            button.TextChanged += ValueUpdated; //Hooking up to event
-            Stack_Panel.Children.Add(button);
-            }
-        }
-
-        private void ValueUpdated(object sender, RoutedEventArgs e) //Event which will be triggerd on click of ya button
-        {
-            var type = sender.GetType();
-            simulationConfig.GetType().GetMember(type.Name);
-
-        }
-        private void Button_Click(object sender, RoutedEventArgs e) //Event which will be triggerd on click of ya button
-        {
-            var newForm = new MainWindow(); //create your new form.
-            newForm.Show(); //show the new form.
             
+        }
+
+        private void Update_Car_Count(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.VehicleCount = int.Parse(Car_Num.Text);
+        }
+
+        private void Update_Highway_Length(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.HighwayLength = int.Parse(Highway_Length.Text);
+
+        }
+
+        private void Update_Highway_Width(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.HighwayWidth = int.Parse(Highway_Width.Text);
+
+        }
+
+        private void Update_LaneClosure_Start(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.LaneClosureStart = int.Parse(Lane_Close_Start.Text);
+
+        }
+
+        private void Update_LaneClosure_End(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.LaneClosureEnd = int.Parse(Lane_Close_End.Text);
+
+        }
+
+        private void Update_LaneClosure_Width(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.LaneClosureWidth = int.Parse(Lane_Close_Width.Text);
+        }
+        private void Update_Exit(object sender, TextChangedEventArgs e)
+        {
+            simulationConfig.VehicleExitIndex = int.Parse(Exit_Input.Text);
+
+        }
+
+        private void Run_Clicked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
