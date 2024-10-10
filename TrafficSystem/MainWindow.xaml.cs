@@ -62,7 +62,7 @@ namespace TrafficSystem
                         Height = height,
                         Width = height,
                     };
-                    switch (highway.lanePositions[x, y].thisState)
+                    switch (highway.lanePositions[x,y].thisState)
                     {
                         case LanePosition.LaneState.empty:
                             rectangles[x, y].Fill = Brushes.Gray;

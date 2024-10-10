@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -64,15 +66,64 @@ namespace TrafficSystem
 
                 if (_highway.lanePositions[x, y].thisState == LanePosition.LaneState.empty)
                 {
-                    _vehicles.Add(new Vehicle(_highway, x, y, config.VehicleExitIndex, vehiclesSpawned));
+                    var newVehicle = new Vehicle(_highway, x, y, config.VehicleExitIndex, vehiclesSpawned); 
+                    newVehicle.ExitReached += RecordVehicleData;
+                    _vehicles.Add(newVehicle);
                     vehiclesSpawned++;
                 }
             }
         }
+        int vehiclesFinished = 0;
+        List<Vehicle.VehicleData> data = new List<Vehicle.VehicleData>();
+        private void RecordVehicleData(object? sender, Vehicle.VehicleData e)
+        {
+            vehiclesFinished++;
+            data.Add(e);
+            string fileName = @"C:\Users\Zach\Desktop\TestResult";
+
+
+            if (vehiclesFinished == config.VehicleCount)
+            {
+                _timer.Stop();
+                try
+                {
+                    // Check if file already exists. If yes, delete it.
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                        using (StreamWriter sw = File.CreateText(fileName))
+                        {
+                            foreach (var v in data)
+                            {
+                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges}\n");
+                            }
+                            sw.Close();
+                        }
+                    }
+                    else
+                    {
+                        using (StreamWriter sw = File.CreateText(fileName))
+                        {
+                            foreach (var v in data)
+                            {
+                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges}\n");
+                            }
+                            sw.Close();
+                        }
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    Console.WriteLine(Ex.ToString());
+                }
+            }
+            //Process data here... Export to comma seperated format for excel.
+        }
+
         private void StartTimer()
         {
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(.25);
+            _timer.Interval = TimeSpan.FromSeconds(config.Timestep);
             _timer.Tick += TimeElapsed;
             _timer.Start();
         }

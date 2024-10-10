@@ -12,6 +12,7 @@
         private VehicleData _vehicleData;
         public struct VehicleData
         {
+            public int lifetime;
             public int vehicleNum;
             public int stepsWaiting;
             public int laneChanges;
@@ -55,6 +56,7 @@
             {
                 return;
             }
+            _vehicleData.lifetime++;
             if (y_current == _vehicleData.exit)
             {
                 Console.WriteLine("Reached Exit");
