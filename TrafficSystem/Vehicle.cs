@@ -1,4 +1,6 @@
-﻿namespace TrafficSystem
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TrafficSystem
 {
     public class Vehicle
     {
@@ -9,6 +11,7 @@
         int exit = -1;
         int steps_waiting;
         bool reachedExit;
+        int vehicleProfile;
         private VehicleData _vehicleData;
         public struct VehicleData
         {
@@ -51,12 +54,62 @@
         }
         public void Step(object sender, EventArgs e)
         {
-
+            CheckForArrival();
             if (reachedExit)
             {
                 return;
             }
             _vehicleData.lifetime++;
+
+            if (NeedToMoveRight())
+            {
+                if (!MoveRight())
+                {
+                    _vehicleData.stepsWaiting++;
+                }
+            }
+            switch (vehicleProfile) 
+            {
+                case 1:
+                    if (ReachedLaneClosure())
+                    {
+                        MoveLeft();
+                    }
+                    else
+                    {
+                        if (!MoveLeft())
+                        {
+                            MoveForward();
+                        }
+                    }
+                    break;
+                case 2:
+                    if (ReachedLaneClosure())
+                    {
+                        MoveLeft();
+                    }
+                    else
+                    {   if (!MoveRight())
+                        {
+                            MoveForward();
+                        }
+                    }
+                    break;
+            }
+            //if (getNextPosition() == LanePosition.LaneState.occupied)
+            //{
+            //    _vehicleData.stepsWaiting++;
+            //    return;
+            //}
+            //if (getNextPosition() == LanePosition.LaneState.closed)
+            //{
+            //    MoveLeft();
+            //    return;
+            //}
+        }
+
+        private void CheckForArrival()
+        {
             if (y_current == _vehicleData.exit)
             {
                 Console.WriteLine("Reached Exit");
@@ -67,32 +120,18 @@
                 ExitReached?.Invoke(this, _vehicleData);
                 return;
             }
-            int rightMost = Math.Clamp(x_current + 1, 0, _highway.x_size - 1);
-            if ((_vehicleData.exit - y_current <= _highway.x_size - x_current))
-            {
-                if (_highway.lanePositions[rightMost, y_current + 1].thisState == LanePosition.LaneState.empty)
-                {
-                    PositionChangeData data = new PositionChangeData
-                    {
-                        oldX = x_current,
-                        oldY = y_current,
-                        newX = rightMost,
-                        newY = y_current + 1,
-                    };
-                    currentLanePosition.thisState = LanePosition.LaneState.empty;
-                    currentLanePosition = _highway.lanePositions[data.newX, data.newY];
-                    currentLanePosition.thisState = LanePosition.LaneState.occupied;
-                    x_current = data.newX;
-                    y_current = data.newY;
-                    _vehicleData.laneChanges++;
-                    UpdateVehicleDisplay(this, data);
-                }
-                else
-                {
-                    _vehicleData.stepsWaiting++;
-                }
-                return;
-            }
+        }
+
+        private bool NeedToMoveRight()
+        {
+            return (_vehicleData.exit - y_current <= _highway.x_size - x_current);
+        }
+        private bool ReachedLaneClosure()
+        {
+            return (getNextPosition() == LanePosition.LaneState.closed);
+        }
+        private bool MoveForward()
+        {
             if (isEmpty(0, 1))
             {
                 PositionChangeData data = new PositionChangeData
@@ -108,35 +147,63 @@
                 y_current = data.newY;
                 _vehicleData.laneChanges++;
                 UpdateVehicleDisplay(this, data);
-                return;
+                return true;
             }
-            if (getNextPosition() == LanePosition.LaneState.occupied)
+            else
             {
-                _vehicleData.stepsWaiting++;
-                return;
+                return false;
             }
-            if (getNextPosition() == LanePosition.LaneState.closed)
+        }
+
+        private bool MoveRight()
+        {
+            int rightMost = Math.Clamp(x_current + 1, 0, _highway.x_size - 1);
+
+            if (_highway.lanePositions[rightMost, y_current + 1].thisState == LanePosition.LaneState.empty)
             {
-                if (isEmpty(-1, 0) && isEmpty(-1, -1))
+                PositionChangeData data = new PositionChangeData
                 {
-                    PositionChangeData data = new PositionChangeData
-                    {
-                        oldX = x_current,
-                        oldY = y_current,
-                        newX = x_current - 1,
-                        newY = y_current,
-                    };
-                    currentLanePosition.thisState = LanePosition.LaneState.empty;
-                    currentLanePosition = _highway.lanePositions[data.newX, data.newY];
-                    _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
-                    x_current = data.newX;
-                    UpdateVehicleDisplay(this, data);
-                }
-                else
+                    oldX = x_current,
+                    oldY = y_current,
+                    newX = rightMost,
+                    newY = y_current + 1,
+                };
+                currentLanePosition.thisState = LanePosition.LaneState.empty;
+                currentLanePosition = _highway.lanePositions[data.newX, data.newY];
+                currentLanePosition.thisState = LanePosition.LaneState.occupied;
+                x_current = data.newX;
+                y_current = data.newY;
+                _vehicleData.laneChanges++;
+                UpdateVehicleDisplay(this, data);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool MoveLeft()
+        {
+            if (isEmpty(-1, 0) && isEmpty(-1, -1))
+            {
+                PositionChangeData data = new PositionChangeData
                 {
-                    _vehicleData.stepsWaiting++;
-                }
-                return;
+                    oldX = x_current,
+                    oldY = y_current,
+                    newX = x_current - 1,
+                    newY = y_current,
+                };
+                currentLanePosition.thisState = LanePosition.LaneState.empty;
+                currentLanePosition = _highway.lanePositions[data.newX, data.newY];
+                _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
+                x_current = data.newX;
+                UpdateVehicleDisplay(this, data);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

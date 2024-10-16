@@ -20,9 +20,10 @@ namespace TrafficSystem
         public int LaneClosureWidth;
 
         public int VehicleCount;
-        public int VehicleExitIndex;
+        public int[] VehicleExitIndex;
 
         public float Timestep;
+        public int IncomingVehiclePattern;
     }
 
     public class Simulation
@@ -30,7 +31,7 @@ namespace TrafficSystem
         public static Simulation Instance;
 
         private SimulationConfig config;
-        public static Action Timer_Tick;
+        public static Action<int> Timer_Tick;
 
         private int vehiclesSpawned;
         private List<Vehicle> _vehicles = new List<Vehicle>();
@@ -58,21 +59,50 @@ namespace TrafficSystem
         {
             if (!highwaySetup) return;
 
-            Random random = new Random();
-            if (vehiclesSpawned < config.VehicleCount)
+            int vehicleSpawnMode = config.IncomingVehiclePattern;
+            int x = 0;
+            int y = 0;
+            switch (vehicleSpawnMode)
             {
-                int x = random.Next(config.HighwayWidth - 1);
-                int y = random.Next(3);
-
-                if (_highway.lanePositions[x, y].thisState == LanePosition.LaneState.empty)
-                {
-                    var newVehicle = new Vehicle(_highway, x, y, config.VehicleExitIndex, vehiclesSpawned); 
-                    newVehicle.ExitReached += RecordVehicleData;
-                    _vehicles.Add(newVehicle);
-                    vehiclesSpawned++;
-                }
+                case 1:
+                    Random random = new Random();
+                    if (vehiclesSpawned < config.VehicleCount)
+                    {
+                        x = random.Next(config.HighwayWidth);
+                        y = 0;
+                        SpawnVehicleAtPosition(x, y);
+                    }
+                    break;
+                case 2:
+                    x = vehiclesSpawned % config.HighwayWidth;
+                    y = 0;
+                    SpawnVehicleAtPosition(x, y);
+                    break;
+                case 3:
+                    y = 0;
+                    for (int i = 0; i < config.HighwayWidth; i++)
+                    {
+                        SpawnVehicleAtPosition(i, y);
+                    }
+                    break;
             }
         }
+
+        private void SpawnVehicleAtPosition(int x, int y)
+        {
+            if (vehiclesSpawned >= config.VehicleCount)
+            {
+                return;
+            }
+            if (_highway.lanePositions[x, y].thisState == LanePosition.LaneState.empty)
+            {
+                var newVehicle = new Vehicle(_highway, x, y, config.VehicleExitIndex[vehiclesSpawned % config.VehicleExitIndex.Length], vehiclesSpawned);
+                newVehicle.ExitReached += RecordVehicleData;
+                _vehicles.Add(newVehicle);
+                vehiclesSpawned++;
+            }
+        }
+
         int vehiclesFinished = 0;
         List<Vehicle.VehicleData> data = new List<Vehicle.VehicleData>();
         private void RecordVehicleData(object? sender, Vehicle.VehicleData e)
@@ -84,6 +114,7 @@ namespace TrafficSystem
 
             if (vehiclesFinished == config.VehicleCount)
             {
+                SendTimerTick();
                 _timer.Stop();
                 try
                 {
@@ -137,7 +168,7 @@ namespace TrafficSystem
         }
         public void SendTimerTick()
         {
-            Timer_Tick?.Invoke();
+            Timer_Tick?.Invoke(vehiclesFinished);
         }
     }
 }

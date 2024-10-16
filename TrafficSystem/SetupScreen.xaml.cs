@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TrafficSystem
 {
@@ -22,12 +8,20 @@ namespace TrafficSystem
     /// </summary>
     public partial class SetupScreen : Page
     {
-            SimulationConfig simulationConfig = new SimulationConfig();
-        int count, length, width, cs, ce, cw, exit = 0;
+        SimulationConfig simulationConfig = new SimulationConfig();
+        int count, length, width, cs, ce, cw, inc;
+        int[] exit = [0];
         float ts = 0;
         public SetupScreen()
         {
             InitializeComponent();
+            count = 20;
+            length = 50;
+            width = 4;
+            cs = 20;
+            ce = 30;
+            cw = 3;
+            exit = [45];
         }
 
         private void Update_Car_Count(object sender, TextChangedEventArgs e)
@@ -45,6 +39,17 @@ namespace TrafficSystem
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
+            foreach (int exitIndex in exit)
+            {
+                if (cs < exitIndex && (ce + width) > exitIndex)
+                {
+                    Error_Popup.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Error_Popup.Visibility = Visibility.Hidden;
+                }
+            }
             simulationConfig.VehicleCount = count;
             simulationConfig.HighwayLength = length;
             simulationConfig.HighwayWidth = width;
@@ -53,12 +58,19 @@ namespace TrafficSystem
             simulationConfig.LaneClosureWidth = cw;
             simulationConfig.VehicleExitIndex = exit;
             simulationConfig.Timestep = ts;
+            simulationConfig.IncomingVehiclePattern = inc;
         }
 
         private void Update_Highway_Width(object sender, TextChangedEventArgs e)
         {
             int.TryParse(Highway_Width.Text, out int value);
             width = value;
+        }
+
+        private void Update_Incoming(object sender, TextChangedEventArgs e)
+        {
+            int.TryParse(Incoming_Input.Text, out int value);
+            inc = value;
         }
 
         private void Update_LaneClosure_Start(object sender, TextChangedEventArgs e)
@@ -80,8 +92,12 @@ namespace TrafficSystem
         }
         private void Update_Exit(object sender, TextChangedEventArgs e)
         {
-            int.TryParse(Exit_Input.Text, out int value);
-            exit = value;
+            string[] exitStrings = Exit_Input.Text.Split(",");
+            exit = new int[exitStrings.Length];
+            for(int i = 0; i < exitStrings.Length; i++) {
+                int.TryParse(exitStrings[i], out int value);
+                exit[i] = value;
+            }
         }
 
         private void Run_Clicked(object sender, RoutedEventArgs e)

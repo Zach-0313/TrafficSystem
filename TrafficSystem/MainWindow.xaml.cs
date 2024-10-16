@@ -22,8 +22,9 @@ namespace TrafficSystem
             LaneClosureEnd = 20,
             LaneClosureWidth = 3,
             VehicleCount = 20,
-            VehicleExitIndex = 25,
-            Timestep = 0.5f
+            VehicleExitIndex = [25],
+            Timestep = 0.5f,
+            IncomingVehiclePattern = 1
         };
 
         public MainWindow(SimulationConfig config)
@@ -31,26 +32,29 @@ namespace TrafficSystem
             InitializeComponent();
             Simulation simulation = new Simulation(config);
 
+            simulationConfig = config;
             highway = Simulation.Instance._highway;
             rectangles = new Rectangle[simulationConfig.HighwayWidth, simulationConfig.HighwayLength];
 
             DrawHighway(MyCanvas);
 
             Vehicle.UpdateVehicleDisplay += UpdateSingleRectangles;
-            Simulation.Timer_Tick += UpdateTimerUI;
+            Simulation.Timer_Tick += UpdateLiveUI;
         }
 
-        private void UpdateTimerUI()
+        private void UpdateLiveUI(int arrivals)
         {
             _timeSteps++;
-            MyTextBlock.Text = _timeSteps.ToString();
+            TimeStepCounter.Text = _timeSteps.ToString();
+            VehicleArrivalCounter.Text = arrivals.ToString();
+            VehiclesInProgressCounter.Text = (simulationConfig.VehicleCount - arrivals).ToString();
         }
         public void DrawHighway(Canvas canvas)
         {
             int nWidth = (int)Application.Current.MainWindow.ActualWidth;
 
             int height = (int)(700 / simulationConfig.HighwayLength);
-            int space = 1;
+            int space = 0;
 
 
             for (int x = 0; x < highway.x_size; x++)
@@ -62,7 +66,7 @@ namespace TrafficSystem
                         Height = height,
                         Width = height,
                     };
-                    switch (highway.lanePositions[x,y].thisState)
+                    switch (highway.lanePositions[x, y].thisState)
                     {
                         case LanePosition.LaneState.empty:
                             rectangles[x, y].Fill = Brushes.Gray;
@@ -74,7 +78,7 @@ namespace TrafficSystem
                             rectangles[x, y].Fill = Brushes.Green;
                             break;
                     }
-                    if(y == simulationConfig.VehicleExitIndex)
+                    if (simulationConfig.VehicleExitIndex.Contains(y))
                     {
                         rectangles[x, y].Fill = Brushes.Orange;
                     }
@@ -108,7 +112,10 @@ namespace TrafficSystem
         public void UpdateSingleRectangles(object sender, Vehicle.PositionChangeData data)
         {
             rectangles[data.oldX, data.oldY].Fill = Brushes.Gray;
-            rectangles[data.newX, data.newY].Fill = Brushes.Green;
+            if (!simulationConfig.VehicleExitIndex.Contains(data.newY))
+            {
+                rectangles[data.newX, data.newY].Fill = Brushes.Green;
+            }
         }
 
 
