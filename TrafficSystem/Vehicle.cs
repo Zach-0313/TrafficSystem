@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace TrafficSystem
+﻿namespace TrafficSystem
 {
     public class Vehicle
     {
@@ -39,7 +37,7 @@ namespace TrafficSystem
             _vehicleData.exit = exitIndex;
             currentLanePosition = _highway.lanePositions[startX, startY];
             currentLanePosition.thisState = LanePosition.LaneState.occupied;
-
+            vehicleProfile = _vehicleData.vehicleNum % 3;
             _highway.VehicleTimeStep += Step;
         }
         private bool isEmpty(int offX, int offY)
@@ -63,14 +61,12 @@ namespace TrafficSystem
 
             if (NeedToMoveRight())
             {
-                if (!MoveRight())
-                {
-                    _vehicleData.stepsWaiting++;
-                }
+                MoveRight();
+                return;
             }
-            switch (vehicleProfile) 
+            switch (vehicleProfile)
             {
-                case 1:
+                case 0:
                     if (ReachedLaneClosure())
                     {
                         MoveLeft();
@@ -81,6 +77,21 @@ namespace TrafficSystem
                         {
                             MoveForward();
                         }
+
+                    }
+                    break;
+                case 1:
+                    if (ReachedLaneClosure())
+                    {
+                        MoveLeft();
+                    }
+                    else
+                    {
+                        if (!MoveRight())
+                        {
+                            MoveForward();
+                        }
+
                     }
                     break;
                 case 2:
@@ -89,10 +100,8 @@ namespace TrafficSystem
                         MoveLeft();
                     }
                     else
-                    {   if (!MoveRight())
-                        {
-                            MoveForward();
-                        }
+                    {
+                        MoveForward();
                     }
                     break;
             }
@@ -151,6 +160,7 @@ namespace TrafficSystem
             }
             else
             {
+                _vehicleData.stepsWaiting++;
                 return false;
             }
         }
@@ -179,6 +189,7 @@ namespace TrafficSystem
             }
             else
             {
+                _vehicleData.stepsWaiting++;
                 return false;
             }
         }
@@ -203,6 +214,7 @@ namespace TrafficSystem
             }
             else
             {
+                _vehicleData.stepsWaiting++;
                 return false;
             }
         }

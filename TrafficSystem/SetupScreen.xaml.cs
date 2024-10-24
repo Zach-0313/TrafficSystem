@@ -103,7 +103,7 @@ namespace TrafficSystem
         private void Run_Clicked(object sender, RoutedEventArgs e)
         {
             ts = 0.25f;
-            simulationConfig.Timestep = 0.25f;
+            simulationConfig.Timestep = 0.125f;
             foreach (var member in simulationConfig.GetType().GetMembers())
             {
                 if (member == null)
