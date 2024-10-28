@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.IO;
 using System.Windows.Threading;
 
 namespace TrafficSystem
 {
-    public struct SimulationConfig 
+    public struct SimulationConfig
     {
         public int HighwayWidth;
         public int HighwayLength;
@@ -24,6 +16,7 @@ namespace TrafficSystem
 
         public float Timestep;
         public int IncomingVehiclePattern;
+        public string FileLocation;
     }
 
     public class Simulation
@@ -109,13 +102,17 @@ namespace TrafficSystem
         {
             vehiclesFinished++;
             data.Add(e);
-            string fileName = @"C:\Users\Zach\Desktop\TestResult";
+            string fileName = config.FileLocation;
 
 
             if (vehiclesFinished == config.VehicleCount)
             {
                 SendTimerTick();
                 _timer.Stop();
+                if (config.FileLocation == "NONE")
+                {
+                    fileName = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/TrafficData";
+                }
                 try
                 {
                     // Check if file already exists. If yes, delete it.
@@ -124,9 +121,10 @@ namespace TrafficSystem
                         File.Delete(fileName);
                         using (StreamWriter sw = File.CreateText(fileName))
                         {
+                            sw.WriteLine($"Vehicle Number,Vehicle Lifetime,Steps Waiting,Target Exit,Lane Changes,Positions Traversed, Vehicle Behavior\n");
                             foreach (var v in data)
                             {
-                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges}\n");
+                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges},{v.positionsTraversed},{v.VehicleBehavior}\n");
                             }
                             sw.Close();
                         }
@@ -135,9 +133,10 @@ namespace TrafficSystem
                     {
                         using (StreamWriter sw = File.CreateText(fileName))
                         {
+                            sw.WriteLine($"Vehicle Number,Vehicle Lifetime,Steps Waiting,Target Exit,Lane Changes,Positions Traversed, Vehicle Behavior\n");
                             foreach (var v in data)
                             {
-                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges}\n");
+                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges},{v.VehicleBehavior}\n");
                             }
                             sw.Close();
                         }

@@ -3,15 +3,13 @@ using System.Windows.Controls;
 
 namespace TrafficSystem
 {
-    /// <summary>
-    /// Interaction logic for SetupScreen.xaml
-    /// </summary>
     public partial class SetupScreen : Page
     {
         SimulationConfig simulationConfig = new SimulationConfig();
         int count, length, width, cs, ce, cw, inc;
         int[] exit = [0];
         float ts = 0;
+        string path;
         public SetupScreen()
         {
             InitializeComponent();
@@ -22,6 +20,9 @@ namespace TrafficSystem
             ce = 30;
             cw = 3;
             exit = [45];
+            ts = .125f;
+            path = "NONE";
+            inc = 1;
         }
 
         private void Update_Car_Count(object sender, TextChangedEventArgs e)
@@ -59,12 +60,18 @@ namespace TrafficSystem
             simulationConfig.VehicleExitIndex = exit;
             simulationConfig.Timestep = ts;
             simulationConfig.IncomingVehiclePattern = inc;
+            simulationConfig.FileLocation = path;
         }
 
         private void Update_Highway_Width(object sender, TextChangedEventArgs e)
         {
             int.TryParse(Highway_Width.Text, out int value);
             width = value;
+        }
+
+        private void OnFilepath(object sender, TextChangedEventArgs e)
+        {
+            path = File_Input.Text;
         }
 
         private void Update_Incoming(object sender, TextChangedEventArgs e)
@@ -102,8 +109,6 @@ namespace TrafficSystem
 
         private void Run_Clicked(object sender, RoutedEventArgs e)
         {
-            ts = 0.25f;
-            simulationConfig.Timestep = 0.125f;
             foreach (var member in simulationConfig.GetType().GetMembers())
             {
                 if (member == null)

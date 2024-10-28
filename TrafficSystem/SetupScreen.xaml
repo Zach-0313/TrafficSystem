@@ -35,6 +35,7 @@
             <Label Content="Incoming Traffic:" HorizontalAlignment="Left" Margin="74,397,0,0" VerticalAlignment="Top" IsEnabled="False" ToolTip="Pattern of Incoming Vehicle Distribution (1 = Random, 2 = Staggered, 3 = Heavy Traffic)" Foreground="Black"/>
             <TextBox x:Name="Incoming_Input" TextWrapping="Wrap" Text="0" Width="120" Margin="213,397,467,23" TextChanged="Update_Incoming"/>
             <TextBlock x:Name="Error_Popup" HorizontalAlignment="Left" Margin="376,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Background="Red" Height="136" Width="149" Visibility="Hidden"><Run Text="ERROR:"/><LineBreak/><Run Text="There is not enough space between an exit and the end of a lane closure."/></TextBlock>
+            <TextBox x:Name="File_Input" HorizontalAlignment="Left" Margin="579,361,0,0" TextWrapping="Wrap" Text="Data Filepath" VerticalAlignment="Top" Width="120" TextChanged="OnFilepath"/>
 
 
         </Grid>

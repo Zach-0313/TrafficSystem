@@ -18,6 +18,8 @@
             public int stepsWaiting;
             public int laneChanges;
             public int exit;
+            public int positionsTraversed;
+            public int VehicleBehavior;
         }
         public struct PositionChangeData
         {
@@ -38,6 +40,7 @@
             currentLanePosition = _highway.lanePositions[startX, startY];
             currentLanePosition.thisState = LanePosition.LaneState.occupied;
             vehicleProfile = _vehicleData.vehicleNum % 3;
+            _vehicleData.VehicleBehavior = vehicleProfile;
             _highway.VehicleTimeStep += Step;
         }
         private bool isEmpty(int offX, int offY)
@@ -154,7 +157,7 @@
                 currentLanePosition = _highway.lanePositions[data.newX, data.newY];
                 _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
                 y_current = data.newY;
-                _vehicleData.laneChanges++;
+                _vehicleData.positionsTraversed++;
                 UpdateVehicleDisplay(this, data);
                 return true;
             }
@@ -184,6 +187,7 @@
                 x_current = data.newX;
                 y_current = data.newY;
                 _vehicleData.laneChanges++;
+                _vehicleData.positionsTraversed++;
                 UpdateVehicleDisplay(this, data);
                 return true;
             }
@@ -209,6 +213,8 @@
                 currentLanePosition = _highway.lanePositions[data.newX, data.newY];
                 _highway.lanePositions[data.newX, data.newY].thisState = LanePosition.LaneState.occupied;
                 x_current = data.newX;
+                _vehicleData.laneChanges++;
+                _vehicleData.positionsTraversed++;
                 UpdateVehicleDisplay(this, data);
                 return true;
             }

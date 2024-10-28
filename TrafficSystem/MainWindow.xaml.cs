@@ -23,7 +23,7 @@ namespace TrafficSystem
             LaneClosureWidth = 3,
             VehicleCount = 20,
             VehicleExitIndex = [25],
-            Timestep = 0.5f,
+            Timestep = 0.125f,
             IncomingVehiclePattern = 1
         };
 
