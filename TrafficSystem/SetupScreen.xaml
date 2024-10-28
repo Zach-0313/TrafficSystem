@@ -1,0 +1,43 @@
+﻿<Page x:Class="TrafficSystem.SetupScreen"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TrafficSystem"
+      Title="SetupScreen" Height="450" Width="800" ClipToBounds="True" WindowHeight="500" WindowWidth="800" Cursor="AppStarting">
+
+
+    <Grid>
+
+        <Grid x:Name="MyGrid">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Faded Desert Retro Adventure Desktop Wallpaper.png"/>
+            </Grid.Background>
+            <Button x:Name="Run_Button" Content="Run_Button" HorizontalAlignment="Left" Margin="596,204,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Run_Clicked"/>
+            <Button x:Name="Save_Button" Content="Save_Button" HorizontalAlignment="Left" Margin="596,297,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Save_Button_Click"/>
+            <Label Content="Number Of Cars" HorizontalAlignment="Left" Margin="74,161,0,0" VerticalAlignment="Top"/>
+            <Label Content="Highway Width" HorizontalAlignment="Left" Margin="74,196,0,0" VerticalAlignment="Top"/>
+            <Label Content="Highway Length" HorizontalAlignment="Left" Margin="78,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Lane Closure Start" HorizontalAlignment="Left" Margin="74,266,0,0" VerticalAlignment="Top"/>
+            <Label Content="Lane Closure End" HorizontalAlignment="Left" Margin="74,301,0,0" VerticalAlignment="Top"/>
+            <Label Content="Lane Closure Width" HorizontalAlignment="Left" Margin="74,335,0,0" VerticalAlignment="Top"/>
+            <Label Content="Exit Location" HorizontalAlignment="Left" Margin="74,366,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="Car_Num" TextWrapping="Wrap" Text="0" Width="120" Margin="213,157,467,263" TextChanged="Update_Car_Count"/>
+            <TextBox x:Name="Highway_Width" TextWrapping="Wrap" Text="0" Width="120" Margin="213,192,467,228" TextChanged="Update_Highway_Width"/>
+            <TextBox x:Name="Highway_Length" TextWrapping="Wrap" Text="0" Width="120" Margin="213,227,467,193" TextChanged="Update_Highway_Length"/>
+            <TextBox x:Name="Lane_Close_Start" TextWrapping="Wrap" Text="0" Width="120" Margin="213,262,467,158" TextChanged="Update_LaneClosure_Start"/>
+            <TextBox x:Name="Lane_Close_End" TextWrapping="Wrap" Text="0" Width="120" Margin="213,297,467,123" TextChanged="Update_LaneClosure_End"/>
+            <TextBox x:Name="Lane_Close_Width" TextWrapping="Wrap" Text="0" Width="120" Margin="213,331,467,89" TextChanged="Update_LaneClosure_Width"/>
+            <TextBox x:Name="Exit_Input" TextWrapping="Wrap" Text="0" Width="120" Margin="213,362,467,58" TextChanged="Update_Exit"/>
+            <Rectangle HorizontalAlignment="Left" Height="280" Margin="69,150,0,0" Stroke="Black" VerticalAlignment="Top" Width="123" Fill="#FFF9F0CE" Panel.ZIndex="-10000"/>
+            <Rectangle HorizontalAlignment="Left" Height="249" Margin="202,150,0,0" Stroke="Black" VerticalAlignment="Top" Width="145" Fill="#FFF9F0CE" Panel.ZIndex="-10000"/>
+            <Rectangle HorizontalAlignment="Left" Height="280" Margin="202,150,0,0" Stroke="Black" VerticalAlignment="Top" Width="145" Fill="#FFF9F0CE" Panel.ZIndex="-10000"/>
+            <Label Content="Incoming Traffic:" HorizontalAlignment="Left" Margin="74,397,0,0" VerticalAlignment="Top" IsEnabled="False" ToolTip="Pattern of Incoming Vehicle Distribution (1 = Random, 2 = Staggered, 3 = Heavy Traffic)" Foreground="Black"/>
+            <TextBox x:Name="Incoming_Input" TextWrapping="Wrap" Text="0" Width="120" Margin="213,397,467,23" TextChanged="Update_Incoming"/>
+            <TextBlock x:Name="Error_Popup" HorizontalAlignment="Left" Margin="376,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Background="Red" Height="136" Width="149" Visibility="Hidden"><Run Text="ERROR:"/><LineBreak/><Run Text="There is not enough space between an exit and the end of a lane closure."/></TextBlock>
+            <TextBox x:Name="File_Input" HorizontalAlignment="Left" Margin="579,361,0,0" TextWrapping="Wrap" Text="Data Filepath" VerticalAlignment="Top" Width="120" TextChanged="OnFilepath"/>
+
+
+        </Grid>
+    </Grid>
+</Page>

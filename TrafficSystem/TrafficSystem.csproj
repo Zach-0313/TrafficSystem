@@ -8,4 +8,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Blue and Green Illustrated Road Desktop Wallpaper.png" />
+    <None Remove="Faded Desert Retro Adventure Desktop Wallpaper.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Blue and Green Illustrated Road Desktop Wallpaper.png" />
+    <Resource Include="Faded Desert Retro Adventure Desktop Wallpaper.png" />
+  </ItemGroup>
+
 </Project>
