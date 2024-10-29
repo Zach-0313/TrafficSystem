@@ -64,7 +64,7 @@
 
             if (NeedToMoveRight())
             {
-                MoveRight();
+                MoveRight(true);
                 return;
             }
             switch (vehicleProfile)
@@ -72,11 +72,11 @@
                 case 0:
                     if (ReachedLaneClosure())
                     {
-                        MoveLeft();
+                        MoveLeft(true);
                     }
                     else
                     {
-                        if (!MoveLeft())
+                        if (!MoveLeft(false))
                         {
                             MoveForward();
                         }
@@ -86,11 +86,11 @@
                 case 1:
                     if (ReachedLaneClosure())
                     {
-                        MoveLeft();
+                        MoveLeft(true);
                     }
                     else
                     {
-                        if (!MoveRight())
+                        if (!MoveRight(false))
                         {
                             MoveForward();
                         }
@@ -100,7 +100,7 @@
                 case 2:
                     if (ReachedLaneClosure())
                     {
-                        MoveLeft();
+                        MoveLeft(true);
                     }
                     else
                     {
@@ -108,16 +108,6 @@
                     }
                     break;
             }
-            //if (getNextPosition() == LanePosition.LaneState.occupied)
-            //{
-            //    _vehicleData.stepsWaiting++;
-            //    return;
-            //}
-            //if (getNextPosition() == LanePosition.LaneState.closed)
-            //{
-            //    MoveLeft();
-            //    return;
-            //}
         }
 
         private void CheckForArrival()
@@ -168,7 +158,7 @@
             }
         }
 
-        private bool MoveRight()
+        private bool MoveRight(bool wait)
         {
             int rightMost = Math.Clamp(x_current + 1, 0, _highway.x_size - 1);
 
@@ -186,19 +176,19 @@
                 currentLanePosition.thisState = LanePosition.LaneState.occupied;
                 x_current = data.newX;
                 y_current = data.newY;
-                _vehicleData.laneChanges++;
+                if(rightMost != x_current)_vehicleData.laneChanges++;
                 _vehicleData.positionsTraversed++;
                 UpdateVehicleDisplay(this, data);
                 return true;
             }
             else
             {
-                _vehicleData.stepsWaiting++;
+                if (wait) _vehicleData.stepsWaiting++;
                 return false;
             }
         }
 
-        private bool MoveLeft()
+        private bool MoveLeft(bool wait)
         {
             if (isEmpty(-1, 0) && isEmpty(-1, -1))
             {
@@ -220,7 +210,7 @@
             }
             else
             {
-                _vehicleData.stepsWaiting++;
+                if(wait) _vehicleData.stepsWaiting++;
                 return false;
             }
         }

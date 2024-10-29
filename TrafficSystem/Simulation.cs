@@ -136,7 +136,7 @@ namespace TrafficSystem
                             sw.WriteLine($"Vehicle Number,Vehicle Lifetime,Steps Waiting,Target Exit,Lane Changes,Positions Traversed, Vehicle Behavior\n");
                             foreach (var v in data)
                             {
-                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges},{v.VehicleBehavior}\n");
+                                sw.WriteLine($"{v.vehicleNum},{v.lifetime},{v.stepsWaiting},{v.exit},{v.laneChanges},{v.positionsTraversed},{v.VehicleBehavior}\n");
                             }
                             sw.Close();
                         }
