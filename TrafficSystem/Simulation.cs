@@ -7,8 +7,8 @@ namespace TrafficSystem
     {
         public int HighwayWidth;
         public int HighwayLength;
-        public int LaneClosureStart;
-        public int LaneClosureEnd;
+        public int[] LaneClosureStart;
+        public int[] LaneClosureEnd;
         public int LaneClosureWidth;
 
         public int VehicleCount;
@@ -44,7 +44,10 @@ namespace TrafficSystem
             if (Instance == null) Instance = this;
 
             _highway = new Highway(config.HighwayWidth, config.HighwayLength);
-            _highway.CloseLane(config.LaneClosureStart, config.LaneClosureEnd, config.LaneClosureWidth);
+            for (int x = 0; x < config.LaneClosureStart.Length; x++)
+            {
+                _highway.CloseLane(config.LaneClosureStart[x], config.LaneClosureEnd[x], config.LaneClosureWidth);
+            }
             highwaySetup = true;
             StartTimer();
         }

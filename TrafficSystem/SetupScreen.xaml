@@ -17,7 +17,7 @@
             <Button x:Name="Save_Button" Content="Save_Button" HorizontalAlignment="Left" Margin="596,297,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Save_Button_Click"/>
             <Label Content="Number Of Cars" HorizontalAlignment="Left" Margin="74,161,0,0" VerticalAlignment="Top"/>
             <Label Content="Highway Width" HorizontalAlignment="Left" Margin="74,196,0,0" VerticalAlignment="Top"/>
-            <Label Content="Highway Length" HorizontalAlignment="Left" Margin="78,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Highway Length" HorizontalAlignment="Left" Margin="72,231,0,0" VerticalAlignment="Top"/>
             <Label Content="Lane Closure Start" HorizontalAlignment="Left" Margin="74,266,0,0" VerticalAlignment="Top"/>
             <Label Content="Lane Closure End" HorizontalAlignment="Left" Margin="74,301,0,0" VerticalAlignment="Top"/>
             <Label Content="Lane Closure Width" HorizontalAlignment="Left" Margin="74,335,0,0" VerticalAlignment="Top"/>

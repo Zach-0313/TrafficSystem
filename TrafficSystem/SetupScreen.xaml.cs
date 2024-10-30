@@ -6,8 +6,11 @@ namespace TrafficSystem
     public partial class SetupScreen : Page
     {
         SimulationConfig simulationConfig = new SimulationConfig();
-        int count, length, width, cs, ce, cw, inc;
+        int count, length, width, cw, inc;
         int[] exit = [0];
+        int[] cs = [0];
+        int[] ce = [0];
+
         float ts = 0;
         string path;
         public SetupScreen()
@@ -16,8 +19,8 @@ namespace TrafficSystem
             count = 20;
             length = 50;
             width = 4;
-            cs = 20;
-            ce = 30;
+            cs = [20];
+            ce = [30];
             cw = 3;
             exit = [45];
             ts = .125f;
@@ -42,13 +45,19 @@ namespace TrafficSystem
         {
             foreach (int exitIndex in exit)
             {
-                if (cs < exitIndex && (ce + width) > exitIndex)
+                foreach (int csIndex in cs)
                 {
-                    Error_Popup.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Error_Popup.Visibility = Visibility.Hidden;
+                    foreach (int ceIndex in ce)
+                    {
+                        if (csIndex < exitIndex && (ceIndex + width) > exitIndex)
+                        {
+                            Error_Popup.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            Error_Popup.Visibility = Visibility.Hidden;
+                        }
+                    }
                 }
             }
             simulationConfig.VehicleCount = count;
@@ -82,14 +91,24 @@ namespace TrafficSystem
 
         private void Update_LaneClosure_Start(object sender, TextChangedEventArgs e)
         {
-            int.TryParse(Lane_Close_Start.Text, out int value);
-            cs = value;
+            string[] exitStrings = Lane_Close_Start.Text.Split(",");
+            cs = new int[exitStrings.Length];
+            for (int i = 0; i < exitStrings.Length; i++)
+            {
+                int.TryParse(exitStrings[i], out int value);
+                cs[i] = value;
+            }
         }
 
         private void Update_LaneClosure_End(object sender, TextChangedEventArgs e)
         {
-            int.TryParse(Lane_Close_End.Text, out int value);
-            ce = value;
+            string[] exitStrings = Lane_Close_End.Text.Split(",");
+            ce = new int[exitStrings.Length];
+            for (int i = 0; i < exitStrings.Length; i++)
+            {
+                int.TryParse(exitStrings[i], out int value);
+                ce[i] = value;
+            }
         }
 
         private void Update_LaneClosure_Width(object sender, TextChangedEventArgs e)
