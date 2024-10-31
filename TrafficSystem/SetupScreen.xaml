@@ -13,8 +13,8 @@
             <Grid.Background>
                 <ImageBrush ImageSource="/Faded Desert Retro Adventure Desktop Wallpaper.png"/>
             </Grid.Background>
-            <Button x:Name="Run_Button" Content="Run_Button" HorizontalAlignment="Left" Margin="596,204,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Run_Clicked"/>
-            <Button x:Name="Save_Button" Content="Save_Button" HorizontalAlignment="Left" Margin="596,297,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Save_Button_Click"/>
+            <Button x:Name="Run_Button" Content="Run" HorizontalAlignment="Left" Margin="596,204,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Run_Clicked"/>
+            <Button x:Name="Save_Button" Content="Save" HorizontalAlignment="Left" Margin="596,297,0,0" VerticalAlignment="Top" Height="45" Width="86" Click="Save_Button_Click"/>
             <Label Content="Number Of Cars" HorizontalAlignment="Left" Margin="74,161,0,0" VerticalAlignment="Top"/>
             <Label Content="Highway Width" HorizontalAlignment="Left" Margin="74,196,0,0" VerticalAlignment="Top"/>
             <Label Content="Highway Length" HorizontalAlignment="Left" Margin="72,231,0,0" VerticalAlignment="Top"/>
