@@ -51,8 +51,8 @@ File Path
 - Unpack the .zip
 - Run the "TrafficSystem.exe"
 - The application is now running.
-- Set simulation parameters as desired(see list above). Once satisfied confirm by pressing "SaveButton"
-- Then press "RunButton"
+- Set simulation parameters as desired(see list above). Once satisfied confirm by pressing "Save"
+- Then press "Run"
 - A new window will appear with your running simulation.
   ![image](https://github.com/user-attachments/assets/37ff180b-9926-4517-a29d-fd2e8b8055f1)
 
