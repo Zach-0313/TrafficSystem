@@ -16,26 +16,46 @@ and any extensions or changes to the original documentation (such as the literat
 #### Simulation Run 2
 The second control setup will be repeated with lane closures from 35 to 40, 60 to 65, and 105 to 115. This will be our worst case scenario test. Data will be recorded at various depths of lane closures(up to closing all but one lane).
 
+#### Simulation Parameters:
+![image](https://github.com/user-attachments/assets/16b8bfd5-eff9-4b14-b242-1c4a8bdc05d2)
+
+Highway Width
+- Number of lanes on the highway.
+
+Highway Length
+- Length of the highway.
+
+Number of Cars
+- How many vehicles to spawn.
+
+Lane Closure Start and End 
+- Lanes are closed between the starting index and this index.
+
+Lane Closure Width
+- How many lanes are closed, starting from the rightmost lane.
+
+Exit Location
+- The target destination of vehicles, add multiple exits separated by comma example: “12, 18”.
+
+Incoming Traffic
+- 1 Random: a vehicle is spawned in a random lane each timestep.
+- 2 Sequential: vehicles are spawned by iterating through the available lanes(ie. 1,2,3, 1,2,3).
+- 3 Simultaneous: Vehicles are spawned in all lanes simultaneously until the configured vehicle count is reached (Heavy Traffic).
+
+File Path
+- Specify where to output the results in the form of a .txt file. To not output results leave this blank.
+
+
 #### How to Run Simulation
-The system is in early stages, but the core functionality is there.
-- Open MainMenu.xaml.cs
-- Find where SimulationConfig is defined(at the top)
-- Modifying these values will direct the simulation
-- Execute the project once your values are set
-- NOTE: a UI to set these values will be added soon, then clicking a "Run" button will run the simulation
+- Download the latest release in the 'releases' tab.
+- Unpack the .zip
+- Run the "TrafficSystem.exe"
+- The application is now running.
+- Set simulation parameters as desired(see list above). Once satisfied confirm by pressing "Save"
+- Then press "Run"
+- A new window will appear with your running simulation.
+  ![image](https://github.com/user-attachments/assets/37ff180b-9926-4517-a29d-fd2e8b8055f1)
 
 #### Features to be added
-- UI to set parameters before running simulation
-- ability to set different exits for each vehicle(multi-exit support)
-- Vehicle data recording
-  - Data processing (graphing? the most traversed lane positions? averages?)
--  Performance improvements(to support more vehicles simulaniously)
--  Support for shorter timesteps(faster simulation)
-  - Dynamically change timestep(normal speed, fast forward?)
+- Dynamically change timestep(normal speed, fast forward?)
 -  Pause feature
-
-### Extensions and Changes
-- A Simulation class has been added to the system to manage the setup of the simulation.
-  - Simulation variables and parameters are passed into the system through a struct that contains all variables in a neat package
-- Simulation Runs and Control variables have been refined in the Methodology section of the literature review
-- Lit Review is formatted correctly now and has citations properly implemented in OverLeaf
