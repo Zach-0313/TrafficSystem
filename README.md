@@ -2,7 +2,7 @@
 ### Goals
 The main goal of this system is to gain the ability to repeatedly measure the traffic created by closing a specific number of lanes for a specific length of road. Existing reasearch has struggled to analyze traffic in construction zones due to the sheer number of factors that effect real-world traffic. By creating a simplified, repeatable system without the environmental factors of a complex system, general conclusions on the effect of construction on traffic systems will be able to be confidently drawn.
 
-### Overall Plan for the Simulation
+### Overall Simulation
 There are several variables to modify when running the simulation to gather data: number of vehicles on the road, how quickly to populate the highway with vehicles, where lane closures occur, and where vehicles will try to get off the highway.
 ![image](https://github.com/user-attachments/assets/16b8bfd5-eff9-4b14-b242-1c4a8bdc05d2)
 
